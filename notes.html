@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Практическая работа №3: Заметки</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; }
+    h1 { text-align: center; color: #333; }
+    input { width: 100%; padding: 8px; margin: 10px 0; }
+    button { margin: 5px; padding: 6px 12px; }
+    .note { 
+      background: #e3f2fd; padding: 12px; margin: 8px 0; border-radius: 4px; 
+      border-left: 4px solid #2196f3;
+    }
+    .note:nth-child(odd) { background: #f3e5f5; border-left-color: #9c27b0; }
+    .note:nth-child(even) { background: #e8f5e9; border-left-color: #4caf50; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📝 Заметки (useState)</h1>
+    <input id="newNote" placeholder="Новая заметка..." />
+    <button onclick="addNote()">Добавить</button>
+    <button onclick="swapFirstLast()">Поменять местами</button>
+    <br/>
+    <input id="search" placeholder="Поиск..." oninput="filterNotes()" />
+    <div id="notes"></div>
+  </div>
+
+  <script>
+    let notes = [
+      { id: 1, text: "Изучить TypeScript", color: "blue" },
+      { id: 2, text: "Сделать практику №3", color: "purple" },
+      { id: 3, text: "Загрузить на GitHub", color: "green" }
+    ];
+    let nextId = 4;
+
+    function render() {
+      const container = document.getElementById("notes");
+      container.innerHTML = "";
+      notes.forEach(note => {
+        const div = document.createElement("div");
+        div.className = "note";
+        div.textContent = note.text;
+        container.appendChild(div);
+      });
+    }
+
+    function addNote() {
+      const input = document.getElementById("newNote");
+      const text = input.value.trim();
+      if (text) {
+        notes.push({ id: nextId++, text, color: "gray" });
+        input.value = "";
+        render();
+      }
+    }
+
+    function swapFirstLast() {
+      if (notes.length < 2) return;
+      const first = notes[0];
+      const last = notes[notes.length - 1];
+      notes[0] = last;
+      notes[notes.length - 1] = first;
+      render();
+    }
+
+    function filterNotes() {
+      const query = document.getElementById("search").value.toLowerCase();
+      const filtered = notes.filter(n => n.text.toLowerCase().includes(query));
+      const container = document.getElementById("notes");
+      container.innerHTML = "";
+      filtered.forEach(note => {
+        const div = document.createElement("div");
+        div.className = "note";
+        div.textContent = note.text;
+        container.appendChild(div);
+      });
+    }
+
+   
+    render();
+  </script>
+</body>
+</html>
